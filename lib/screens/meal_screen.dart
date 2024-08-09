@@ -8,28 +8,23 @@ import 'detile_meal_screen.dart';
 
 class MealScreen extends StatelessWidget {
    MealScreen({
-    Key? key,
+    super.key,
     required this.titleCatgory,
-    required this.displayedMeals, required this.tpggelFavorite, required this.filters,
-  }) : super(key: key);
+    required this.displayedMeals,
+    required this.filters,
+  });
+
+
+
   final String? titleCatgory;
   final List<Meal> displayedMeals;
-  final void Function(Meal meal) tpggelFavorite;
-  final Map<String,bool> filters;
-late var filteredData = [];
 
+  final Map<String, bool> filters;
+  late var filteredData = [];
 
   @override
   Widget build(BuildContext context) {
-    // filters?? {
-    //   'gluten': false,
-    //   'lactose': false,
-    //   'vegetarian': false,
-    //   'vegan': false,
-    // };
-
-
-    filteredData= displayedMeals.where((meal) {
+    filteredData = displayedMeals.where((meal) {
       if (filters['gluten']! && !meal.isGlutenFree) {
         return false;
       }
@@ -43,14 +38,10 @@ late var filteredData = [];
         return false;
       }
       return true;
-
     }).toList();
 
-
-
-
-    return titleCatgory== null
-    // this is the case of the favorite page
+    return titleCatgory == null
+        // this is the case of the favorite page
         ? content(context)
         // this is the case of the meal page
         : Scaffold(
@@ -60,29 +51,24 @@ late var filteredData = [];
             ),
             body: content(context),
           );
-
   }
 
   SingleChildScrollView content(BuildContext context) {
     return SingleChildScrollView(
-        child: Column(
-            children: filteredData
-                .map(
-                  (meal) => MealItem(
-                      meal: meal,
-                      onSlectMeal: (meal) {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                DetileMealScreen(meal: meal, toggleFavorite: tpggelFavorite
-                                ),
-                          ),
-                        );
-
-                      }),
-                )
-
-                .toList()),
-      );
+      child: Column(
+          children: filteredData
+              .map(
+                (meal) => MealItem(
+                    meal: meal,
+                    onSlectMeal: (meal) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => DetileMealScreen(meal: meal),
+                        ),
+                      );
+                    }),
+              )
+              .toList()),
+    );
   }
 }

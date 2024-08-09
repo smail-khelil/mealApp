@@ -1,36 +1,46 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:mealapp_4/models/meal.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DetileMealScreen extends StatefulWidget {
-  const DetileMealScreen({super.key,  required this.meal, required this.toggleFavorite});
- final Meal meal;
- final void Function(Meal meal) toggleFavorite;
+import '../providers/favorite_provider.dart';
+
+class DetileMealScreen extends ConsumerWidget {
+  const DetileMealScreen({super.key, required this.meal});
+
+  final Meal meal;
 
   @override
-  State<DetileMealScreen> createState() => _DetileMealScreenState();
-}
-
-class _DetileMealScreenState extends State<DetileMealScreen> {
-  var iconFavorite = Icons.favorite_border;
-  void addFavorite() {
-    widget.toggleFavorite(widget.meal);
-    setState(() {
-      iconFavorite = iconFavorite == Icons.favorite_border
-          ? Icons.favorite
-          : Icons.favorite_border;
-    });
-  }
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final mediaQuery = MediaQuery.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.meal.title),
+        title: Text(meal.title),
         actions: [
           IconButton(
-            icon:  Icon(iconFavorite),
+            icon: Icon(
+              // it will check if the meal is in the favorite list or not
+              ref.watch(favoriteProvider).contains(meal)
+                  ? Icons.favorite
+                  : Icons.favorite_border,
+            ),
             onPressed: () {
-              addFavorite();
+
+              ref.read(favoriteProvider.notifier).toggelFavoriteMeal(meal);
+
+              log('meal: ${meal.title}');
+
+              SnackBar snackBar = SnackBar(
+                content: Text(
+                  ref.watch(favoriteProvider).contains(meal)
+                      ? 'Added to Favorite'
+                      : 'Removed from Favorite',
+                ),
+                duration: const Duration(seconds: 1),
+              );
+
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
             },
           ),
@@ -40,7 +50,7 @@ class _DetileMealScreenState extends State<DetileMealScreen> {
         child: Column(
           children: [
             Image.network(
-              widget.meal.imageUrl,
+              meal.imageUrl,
               height: 300,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -56,7 +66,7 @@ class _DetileMealScreenState extends State<DetileMealScreen> {
                 horizontal: 20,
               ),
               child: Text(
-                widget.meal.title,
+                meal.title,
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 style: const TextStyle(
@@ -106,10 +116,10 @@ class _DetileMealScreenState extends State<DetileMealScreen> {
                             vertical: 5,
                             horizontal: 10,
                           ),
-                          child: Text(widget.meal.ingredients[index]),
+                          child: Text(meal.ingredients[index]),
                         ),
                       ),
-                      itemCount: widget.meal.ingredients.length,
+                      itemCount: meal.ingredients.length,
                     ),
                   ),
                   const SizedBox(
@@ -143,12 +153,12 @@ class _DetileMealScreenState extends State<DetileMealScreen> {
                             leading: CircleAvatar(
                               child: Text('# ${(index + 1)}'),
                             ),
-                            title: Text(widget.meal.steps[index]),
+                            title: Text(meal.steps[index]),
                           ),
                           const Divider(),
                         ],
                       ),
-                      itemCount: widget.meal.steps.length,
+                      itemCount: meal.steps.length,
                     ),
                   ),
                 ],

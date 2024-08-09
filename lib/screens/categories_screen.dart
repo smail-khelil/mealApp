@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 
 import '../data/damedata.dart';
-import '../models/meal.dart';
+
 import '../widgets/categorie_grid_item.dart';
 
 class CategoriesScreen extends StatelessWidget {
+  const CategoriesScreen(
+      {super.key,  required this.filters});
 
 
-
-  const CategoriesScreen({super.key, required this.toggleFavorite, required this.filters});
-  final Function (Meal meal) toggleFavorite;
-  final Map <String,bool>filters;
+  final Map<String, bool> filters;
 
   @override
   Widget build(BuildContext context) {
-
-
     return Container(
       margin: const EdgeInsets.all(5),
       child: GridView(
@@ -28,16 +25,22 @@ class CategoriesScreen extends StatelessWidget {
             childAspectRatio: 3 / 2),
         children: [
           //filter data
+          // ...availableCategories.map((category) {
+          //   return CategorieGridItem(
+          //     category: category,
+          //     toggleFavorite: toggleFavorite,
+          //     filters:filters,
+          //
+          //   );
+          // }).toList(),
+
           ...availableCategories.map((category) {
             return CategorieGridItem(
               category: category,
-              toggleFavorite: toggleFavorite,
-              filters:filters,
 
+              filters: filters,
             );
           }).toList(),
-
-
         ],
       ),
     );

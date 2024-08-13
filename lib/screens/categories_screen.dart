@@ -6,10 +6,7 @@ import '../widgets/categorie_grid_item.dart';
 
 class CategoriesScreen extends StatelessWidget {
   const CategoriesScreen(
-      {super.key,  required this.filters});
-
-
-  final Map<String, bool> filters;
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,23 +21,12 @@ class CategoriesScreen extends StatelessWidget {
                 10, // spacing between columns because it's like rows,
             childAspectRatio: 3 / 2),
         children: [
-          //filter data
-          // ...availableCategories.map((category) {
-          //   return CategorieGridItem(
-          //     category: category,
-          //     toggleFavorite: toggleFavorite,
-          //     filters:filters,
-          //
-          //   );
-          // }).toList(),
 
           ...availableCategories.map((category) {
             return CategorieGridItem(
               category: category,
-
-              filters: filters,
             );
-          }).toList(),
+          }),
         ],
       ),
     );

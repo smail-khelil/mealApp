@@ -73,7 +73,7 @@ class MealItem extends StatelessWidget {
                       padding: const EdgeInsets.all(10),
                       decoration:  BoxDecoration(
                         color: Colors.white.withOpacity(0.8),
-                        borderRadius: BorderRadius.all(
+                        borderRadius: const BorderRadius.all(
                           Radius.circular(15 )
                         ),
                       ),

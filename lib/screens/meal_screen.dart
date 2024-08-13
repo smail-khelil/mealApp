@@ -1,45 +1,39 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:mealapp_4/models/meal.dart';
 import 'package:mealapp_4/widgets/meal_item.dart';
 
+import '../providers/favorite_provider.dart';
+import '../providers/filter_provider.dart';
 import 'detile_meal_screen.dart';
 
-class MealScreen extends StatelessWidget {
-   MealScreen({
+class MealScreen extends ConsumerWidget {
+  MealScreen({
     super.key,
     required this.titleCatgory,
-    required this.displayedMeals,
-    required this.filters,
+
   });
 
-
-
   final String? titleCatgory;
-  final List<Meal> displayedMeals;
 
-  final Map<String, bool> filters;
-  late var filteredData = [];
+
+  late List<Meal> dataDisplayed = [];
+
 
   @override
-  Widget build(BuildContext context) {
-    filteredData = displayedMeals.where((meal) {
-      if (filters['gluten']! && !meal.isGlutenFree) {
-        return false;
-      }
-      if (filters['lactose']! && !meal.isLactoseFree) {
-        return false;
-      }
-      if (filters['vegetarian']! && !meal.isVegetarian) {
-        return false;
-      }
-      if (filters['vegan']! && !meal.isVegan) {
-        return false;
-      }
-      return true;
-    }).toList();
+  Widget build(BuildContext context, WidgetRef ref) {
+    if(titleCatgory == null){
+      dataDisplayed = ref.watch(favoriteProvider);
+    }else{
+      dataDisplayed = ref.watch(filteredMealProvider);
+    }
 
+
+    log('filteredData: ${dataDisplayed.length}');
     return titleCatgory == null
         // this is the case of the favorite page
         ? content(context)
@@ -56,7 +50,7 @@ class MealScreen extends StatelessWidget {
   SingleChildScrollView content(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
-          children: filteredData
+          children: dataDisplayed
               .map(
                 (meal) => MealItem(
                     meal: meal,

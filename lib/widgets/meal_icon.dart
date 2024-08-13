@@ -12,7 +12,7 @@ class MealIcon extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
          Icon(iconCardX),
-        SizedBox(width: 6),
+        const SizedBox(width: 6),
         Text(textX),
       ],
     );

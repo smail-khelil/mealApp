@@ -6,9 +6,9 @@ class FavoritMealNotifier extends StateNotifier<List<Meal>> {
 
   bool toggelFavoriteMeal(Meal meal) {
     final existingIndex = state.indexWhere((element) => element.id == meal.id);
-    state.forEach((element) {
+    for (var element in state) {
       print('page home: ${element.title}');
-    });
+    }
 
     if (existingIndex >= 0) {
       state = state.where((element) => element.id != meal.id).toList();

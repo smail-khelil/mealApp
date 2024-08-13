@@ -1,13 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
-
 import 'package:mealapp_4/screens/meal_screen.dart';
 
-import '../providers/favorite_provider.dart';
+
 import '../widgets/main_drawer.dart';
 import 'categories_screen.dart';
 
@@ -19,26 +15,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  // final List<Meal> _favoriteMeals = [];
-
-  // void toggelFavoriteMeal(Meal meal) {
-  //   final existingIndex =
-  //       _favoriteMeals.indexWhere((element) => element.id == meal.id);
-  //   _favoriteMeals.forEach((element) {
-  //     print('page home: ${element.title}');
-  //   });
-  //
-  //   if (existingIndex >= 0) {
-  //     // setState(() {
-  //       _favoriteMeals.removeAt(existingIndex);
-  //     // });
-  //   } else {
-  //     // setState(() {
-  //       _favoriteMeals.add(meal);
-  //     // });
-  //   }
-  // }
-
   int _selectedPageIndex = 0;
 
   void _selectPage(int index) {
@@ -47,50 +23,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
   }
 
-  final Map<String, bool> _filters = {
-    'gluten': false,
-    'lactose': false,
-    'vegetarian': false,
-    'vegan': false,
-  };
-
   @override
   Widget build(BuildContext context) {
-    //this is the way to get the data from the provider <of the favorite meals>
-    final toggelFavoriteMeal = ref.watch(favoriteProvider);
+    // use provider of filter
 
-    Widget page = CategoriesScreen(filters: _filters);
+    //this is the way to get the data from the provider <of the favorite meals>
+    // final toggelFavoriteMeal = ref.watch(favoriteProvider);
+
+    Widget page = const CategoriesScreen();
     var pageTitle = 'Choose your meal';
 
     // control the page to be displayed
     if (_selectedPageIndex == 1) {
       page = MealScreen(
-          // displayedMeals: _favoriteMeals,
-        displayedMeals: toggelFavoriteMeal,
-          titleCatgory: null,
-          filters: _filters);
+        titleCatgory: null,
+      );
       pageTitle = 'Favorites';
-    } else if (_selectedPageIndex == 2) {
-      // page = FilterScreen();
-      // pageTitle = 'Filters';
-      // Navigator.of(context).push(
-      //   MaterialPageRoute(
-      //     builder: (context) => const FilterScreen()
-      //   ),
-      // );
     } else {
-      page = CategoriesScreen(filters: _filters);
+      page = const CategoriesScreen();
     }
 
     return Scaffold(
-      drawer: MainDrawer(selectPage: _selectPage, filters: _filters),
+      drawer: MainDrawer(selectPage: _selectPage),
       appBar: AppBar(
         actions: [
           IconButton(
             icon: const Icon(Icons.filter_alt_sharp),
-            onPressed: () {
-              log(_filters.toString());
-            },
+            onPressed: () {},
           )
         ],
         title: Text(pageTitle),

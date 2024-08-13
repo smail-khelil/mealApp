@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import '../screens/filter_screen.dart';
 
 class MainDrawer extends StatefulWidget {
-  const MainDrawer({super.key, required this.selectPage, required this.filters});
+  const MainDrawer({super.key, required this.selectPage});
 final void Function(int) selectPage;
-final Map<String, bool> filters;
+
   @override
   State<MainDrawer> createState() => _MainDrawerState();
 }
@@ -71,7 +71,7 @@ class _MainDrawerState extends State<MainDrawer> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.filter_alt_sharp),
+            leading: const Icon(Icons.filter_alt_sharp),
             title: const Text('Filters'),
             onTap: () {
               Navigator.of(context).pop();
@@ -82,10 +82,7 @@ class _MainDrawerState extends State<MainDrawer> {
                 ),
               ).then((value) {
                 if(value != null){
-                  widget.filters['gluten'] = value['gluten'];
-                  widget.filters['lactose'] = value['lactose'];
-                  widget.filters['vegetarian'] = value['vegetarian'];
-                  widget.filters['vegan'] = value['vegan'];
+                  print(value);
                 }
 
               });
